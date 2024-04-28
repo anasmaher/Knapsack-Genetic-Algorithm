@@ -63,19 +63,27 @@ def getBestChromosome(population):
     
     return population[maxValIndex]
 
-
+# Replacememnt
 def replacement(child1, child2, population):
     ch1F = getFitness(child1)
     ch2F = getFitness(child2)
-    
+    if ch1F < ch2F:
+        child1, child2 = child2, child1
+        ch1F, ch2F = ch2F, ch1F
+        
     # Find worst two chromosomes in the population
     worstFirst = min(getFitness(ch) for ch in population)
     worstFirstInd = population.index(min(population, key=getFitness))
-    population[worstFirstInd] = child1
+    if ch2F >= worstFirst:
+        population[worstFirstInd] = child2
+    elif ch1F >= worstFirst:
+        population[worstFirstInd] = child1
+        return
     
     worstSecond = min(getFitness(ch) for ch in population)
     worstSecondInd = population.index(min(population, key=getFitness))
-    population[worstSecondInd] = child2
+    if ch1F >= worstSecond:
+        population[worstSecondInd] = child1
 
 def display(bestFitnessValues):
     generationss = range(1, len(bestFitnessValues) + 1)
